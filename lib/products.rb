@@ -24,7 +24,7 @@ module Products
       att["category_id"] = product.product.taxons.first.id if product.product.taxons.first
       hash , props = {} , product.product.product_properties
       props.each{|prop| hash[prop.property.name] = prop.value}
-      att["properties"] = hash.to_yaml
+      att["properties"] = hash.to_json
       main = product.images[0]
       att["main_picture_file_name"] = main.attachment_file_name if main
       extra = product.images[1]
