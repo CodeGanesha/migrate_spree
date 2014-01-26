@@ -4,15 +4,15 @@ namespace :db do
   desc "Export all object to yaml in clerk format"
   task :export => :environment do
     require "export"
-    ex = Export.new "/Users/raisa/office_clerk/test/fixtures/"
+    ex = Export.new
     ex.init_all
-    ex.out
+    ex.write_all
   end
   desc "Export all products to yaml in clerk format"
   task :export_products => :environment do
     require "export"
-    ex = Export.new "/Users/raisa/office_clerk/test/fixtures/"
+    ex = Export.new 
     ex.init_products
-    ex.out_products
+    ex.write_products
   end
 end
