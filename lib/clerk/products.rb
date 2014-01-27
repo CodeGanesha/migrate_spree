@@ -1,4 +1,4 @@
-module Products
+module Clerk::Products
   def fix_products
     Product.all.each do |p|
       puts p.full_name

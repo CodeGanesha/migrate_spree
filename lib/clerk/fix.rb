@@ -7,7 +7,7 @@ module Clerk
   class Fix
     def initialize
       FIXES.each do |mod|
-        self.class.send :include ,  eval(mod.to_s.capitalize)
+        self.class.send :include ,  eval("Clerk::#{mod.to_s.capitalize}")
       end
     end
     #initialize all models, don't do in initializer so we can only run one model if we want
