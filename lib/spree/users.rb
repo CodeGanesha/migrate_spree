@@ -1,4 +1,4 @@
-module Users
+module Spree::Users
 
   def init_users
     emails =  Spree::Order.where(:state => "complete" ).collect{|o| o.email}.uniq 

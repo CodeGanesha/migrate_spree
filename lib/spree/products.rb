@@ -1,4 +1,4 @@
-module Products
+module Spree::Products
   def init_products
     @products = {}
     all = Spree::Variant.all()

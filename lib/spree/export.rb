@@ -1,16 +1,15 @@
-require "spree"
 
 MODELS = [:orders , :products , :taxons , :users]
 EXPORT_TO = "/Users/raisa/office_clerk/test/fixtures/"
 
 MODELS.each do |mod|
-  require mod.to_s
+  require "spree/#{mod}"
 end
 
 # we generate a fixture for each model that we want to export.
 # orders are a litle different , see orders module
 # provide some helpers and the mechanism to require, init and write models
-class Export
+class Spree::Export
   def initialize 
     MODELS.each do |mod|
       self.class.send :include ,  eval(mod.to_s.capitalize)

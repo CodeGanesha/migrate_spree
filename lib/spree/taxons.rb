@@ -1,4 +1,4 @@
-module Taxons
+module Spree::Taxons
   def init_taxons
     @taxons = {}
     all = Spree::Taxon.all
