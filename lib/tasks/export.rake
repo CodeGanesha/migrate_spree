@@ -1,18 +1,17 @@
 require 'rake'
 
 namespace :db do
-  desc "Export all object to yaml in clerk format"
-  task :export => :environment do
-    require "export"
-    ex = Export.new
-    ex.init_all
-    ex.write_all
-  end
-  desc "Export all products to yaml in clerk format"
-  task :export_products => :environment do
-    require "export"
-    ex = Export.new 
-    ex.init_products
-    ex.write_products
+  namespace :export do
+    # define a task to run just each defined model by eg rake db:export:export_users
+    # or db:export:export_all
+    if defined? Spree
+      require "export"
+      (MODELS + [:all]).each do |mod|
+        #tried long enough to do this with the api but failed. pull welcome
+        description =  "Export #{mod} to yaml in clerk format"
+        code = "ex = Export.new; ex.init_#{mod}; ex.write_#{mod}"
+        eval "desc '#{description}'; task :#{mod} => :environment do #{code}; end"
+      end
+    end
   end
 end
