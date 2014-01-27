@@ -1,6 +1,6 @@
 require "spree"
 
-MODELS = [:orders , :products , :taxons]
+MODELS = [:orders , :products , :taxons , :users]
 EXPORT_TO = "/Users/raisa/office_clerk/test/fixtures/"
 
 MODELS.each do |mod|

@@ -1,6 +1,5 @@
 #orders are a little different as they do baskets too (as those are new), 
 #   items as they are attached 
-#  and users, as we don't want any users that don't have orders (or all those fake ones) 
 
 module Orders
 
@@ -14,21 +13,10 @@ module Orders
     orders.each do |order|
       att = passthrough( order , ["id" , "email" , "number" , "created_at"])
       att["ordered_on"] = order.completed_at
-      add_user(order) if order.user and !order.user.email.index("example.net")
       add_basket(order)
       add_address(order , order.bill_address)
       @orders[order.id] = att
     end
-  end
-  def add_user order
-    was = @users[order.email]
-    if was
-      add_address( was , order.user.bill_address )
-      return
-    end
-    user = passthrough( order.user , ["email", "encrypted_password", "password_salt" , "created_at"])
-    add_address( user , order.user.bill_address )
-    @users[user["email"]] = user
   end
   def add_basket order
     @baskets[order.id] = { "kori_id" => order.id , "kori_type" => "Order" , "id" => order.id , "total_price" => order.total ,
@@ -42,7 +30,6 @@ module Orders
   end
   def write_orders
     write :orders
-    write :users
     write :items
     write :baskets
   end
