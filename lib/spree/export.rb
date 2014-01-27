@@ -10,7 +10,7 @@ end
 # orders are a litle different , see orders module
 # provide some helpers and the mechanism to require, init and write models
 class Spree::Export
-  def initialize 
+  def initialize
     MODELS.each do |mod|
       self.class.send :include ,  eval(mod.to_s.capitalize)
     end

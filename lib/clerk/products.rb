@@ -15,7 +15,12 @@ module Products
       end
       group = props["Tuoteryhmä"]
       if !p.category and !group.blank?
-        p.category = Category.find_or_create_by_name group
+        group = group.capitalize
+        p.category = Category.find_by_name group
+        unless p.category
+          puts "Link #{group.downcase}"
+          p.category = Category.create( :name => group , :link => group.downcase)
+        end
       end
       p.properties = ""
       #line prices that have gone askew in time
