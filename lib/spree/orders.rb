@@ -2,7 +2,6 @@
 #   items as they are attached 
 
 module Spree::Orders
-
   def init_orders
     @orders = {}
     @items = {}
@@ -15,6 +14,19 @@ module Spree::Orders
       att["ordered_on"] = order.completed_at
       add_basket(order)
       add_address(order , order.bill_address)
+      att["shipped_on"] = order.completed_at
+      if(shipment = order.shipments.first)
+        att["shipment_price"] = shipment.cost
+        att["shipment_type"] = shipment.shipping_method.name
+        att["shipment_tax"] = 24.0
+        att["shipped_on"] = shipment.shipped_at.to_date if shipment.shipped_at
+      else
+        att["shipment_price"] = 0.0
+      end
+      if( payment = order.payments.first )
+        att["payment_type"] = payment.payment_method.name if payment.payment_method
+      end
+      att["paid_on"] = order.completed_at
       @orders[order.id] = att
     end
   end
