@@ -19,9 +19,14 @@ module Spree::Users
       end
       @users[user["email"]] = user
     end
+    Spree::Role.find_by_name("admin").users.each do |user|
+      @users[user.email]["admin"] = true
+    end
   end
 
   def write_users
-    write :users
+    file =  File.new("#{EXPORT_TO}clerks.yml","w")
+    file << @users.to_yaml
+    file.close
   end
 end
