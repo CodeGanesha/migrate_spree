@@ -9,6 +9,7 @@ module Clerk::Orders
       del = true if order.created_at.year < 2012
       order.basket.items.each do |item|
         del = true unless item.product
+        item.name = item.product.full_name
         del ? item.delete :  item.save! 
       end
       if(del)
