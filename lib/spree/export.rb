@@ -1,6 +1,5 @@
 
 MODELS = [:orders , :products , :taxons , :users]
-EXPORT_TO = "/Users/raisa/office_clerk/test/fixtures/"
 
 MODELS.each do |mod|
   require "spree/#{mod}"
@@ -11,6 +10,7 @@ end
 # provide some helpers and the mechanism to require, init and write models
 class Spree::Export
   def initialize
+    @export_dir = File.join(Rails.root, "test" ,"fixtures")
     MODELS.each do |mod|
       self.class.send :include ,  eval("Spree::#{mod.to_s.capitalize}")
     end
@@ -27,8 +27,9 @@ class Spree::Export
     end
   end
   # little helper to write the hash. 
-  def write sym
-    file =  File.new("#{EXPORT_TO}#{sym}.yml","w")
+  def write sym , filename = nil
+    filename = sym unless filename
+    file =  File.new(File.join(@export_dir , "#{filename}.yml") ,"w")
     file << eval("@#{sym}.to_yaml")
     puts "written #{sym} : " + eval("@#{sym}.length").to_s
     file.close

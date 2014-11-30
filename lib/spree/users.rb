@@ -25,8 +25,6 @@ module Spree::Users
   end
 
   def write_users
-    file =  File.new("#{EXPORT_TO}clerks.yml","w")
-    file << @users.to_yaml
-    file.close
+    write :users , :clerks
   end
 end

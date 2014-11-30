@@ -6,7 +6,6 @@ module Spree::Orders
     @orders = {}
     @items = {}
     @baskets = {}
-    @users = {}
     orders = Spree::Order.where(:state => "complete" )
     puts "orders #{orders.length}"
     orders.each do |order|
@@ -17,7 +16,7 @@ module Spree::Orders
       att["shipped_on"] = order.completed_at
       if(shipment = order.shipments.first)
         att["shipment_price"] = shipment.cost
-        att["shipment_type"] = shipment.shipping_method.name
+        att["shipment_type"] = shipment.shipping_method ? shipment.shipping_method.name : ""
         att["shipment_tax"] = 24.0
         att["shipped_on"] = shipment.shipped_at.to_date if shipment.shipped_at
       else

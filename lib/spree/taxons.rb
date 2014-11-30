@@ -10,8 +10,6 @@ module Spree::Taxons
     end 
   end
   def write_taxons
-    file =  File.new("#{EXPORT_TO}categories.yml","w")
-    file << @taxons.to_yaml
-    file.close
+    write :taxons , :categories
   end
 end
