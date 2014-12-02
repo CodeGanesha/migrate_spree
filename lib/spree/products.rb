@@ -8,6 +8,7 @@ module Spree::Products
     Spree::Order.where(:state => "complete" ).each do |order|
       order.line_items.each do |item|
         vars << item.variant_id
+        vars << item.variant.product.master.id unless item.variant.is_master?
       end
     end
     vars.uniq!.collect{|i| Spree::Variant.find(i)}

@@ -37,6 +37,7 @@ module Spree::Orders
       #basket and order id are the same (works as there are no purchases in spree)
       i["basket_id"]  = item.order_id 
       i["product_id"] = item.variant_id
+      i["name"] = item.variant.product.name
       @items[item.id] = i
     end  
   end
