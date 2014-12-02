@@ -35,6 +35,8 @@ Tip: During (the inevitable) development and debugging runs, limit the amount to
 - rake db:export:all     will create fixtures into test/fixtures
 - move the fixtures into your new clerk app
 
+For the first step you can now decide how to gather products. Initially i did all, but in an old shop that included a lot of old ones, and so the current state is to take everything that has ever been sold. Edit lib/spree/products to change.
+
 #### Load and fix
 
 - rake db:fixtures:load to load the (usually from test/fixtures) (remember to migrate first)

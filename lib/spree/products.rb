@@ -1,7 +1,20 @@
 module Spree::Products
+
+  def init_all
+    Spree::Variant.all()
+  end
+  def init_from_orders
+    vars = []
+    Spree::Order.where(:state => "complete" ).each do |order|
+      order.line_items.each do |item|
+        vars << item.variant_id
+      end
+    end
+    vars.uniq!.collect{|i| Spree::Variant.find(i)}
+  end
   def init_products
     @products = {}
-    all = Spree::Variant.all()
+    all = init_from_orders
     puts "products #{all.length}"
     all.each do |product|
       next if product.deleted_at
