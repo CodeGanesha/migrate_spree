@@ -25,8 +25,8 @@ module Spree::Orders
       end
       if( payment = order.payments.first )
         att["payment_type"] = payment.payment_method.name if payment.payment_method
+        att["paid_on"] = order.completed_at if payment.state == "completed"
       end
-      att["paid_on"] = order.completed_at
       @orders[order.id] = att
     end
   end
