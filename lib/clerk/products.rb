@@ -1,5 +1,6 @@
 module Clerk::Products
   def fix_products
+    errors = []
     Product.all.each do |p|
       puts p.full_name
       if p.ean.blank?
@@ -29,7 +30,7 @@ module Clerk::Products
         if(p.price < prices.min) or (p.price > prices.max)
           p.price = prices.min 
         end
-        p.inventory = p.products.sum(&:inventory)
+        p.inventory = p.products.sum(:inventory,0)
       end
       #prices rounded  to 5 cent (in finland that is the smallest coin)
       if p.price 
@@ -37,7 +38,11 @@ module Clerk::Products
       else
         p.price = 0.0
       end
-      p.save!
+      p.name = "none" if (!p.product.nil?) and p.name.blank?
+      unless  p.save
+        puts "DELETING #{p.id}"
+        p.destroy
+      end
     end
   end
 end

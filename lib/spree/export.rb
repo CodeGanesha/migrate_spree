@@ -1,6 +1,5 @@
 
 MODELS = [:orders , :products , :taxons , :users]
-EXPORT_TO = "/Users/raisa/office_clerk/test/fixtures/"
 
 MODELS.each do |mod|
   require "spree/#{mod}"
@@ -11,6 +10,7 @@ end
 # provide some helpers and the mechanism to require, init and write models
 class Spree::Export
   def initialize
+    @export_dir = File.join(Rails.root, "test" ,"fixtures")
     MODELS.each do |mod|
       self.class.send :include ,  eval("Spree::#{mod.to_s.capitalize}")
     end
@@ -26,11 +26,15 @@ class Spree::Export
       self.send "write_#{mod}" 
     end
   end
-  # little helper to write the hash. 
-  def write sym
-    file =  File.new("#{EXPORT_TO}#{sym}.yml","w")
-    file << eval("@#{sym}.to_yaml")
-    puts "written #{sym} : " + eval("@#{sym}.length").to_s
+  # little helper to write the hash. Sym is symbol with the same name as the instance variable to write.
+  # optional second arg is the filename, when not given  defaults to sym. 
+  # Use @export_dir which defaults to rails.root/test/fixtures
+  def write sym , filename = nil
+    filename = sym unless filename
+    instance = eval "@#{sym}"
+    file =  File.new(File.join(@export_dir , "#{filename}.yml") ,"w")
+    file << instance.to_yaml('Encoding' => 'UTF-8')
+    puts "written #{sym} : " + instance.length.to_s
     file.close
   end
   #many attribute names a re the same, so we pass them through to the clerk hash we are creating
@@ -47,9 +51,9 @@ class Spree::Export
     return unless address
     add = {}
     add["name"] = address.firstname + " " + address.lastname
-    add["street"] = address.address1 + " " + address.address2.to_s
+    add["street"] = address.address1.to_s + " " + address.address2.to_s
     add["city"] = address.zipcode + " " + address.city
     add["phone"] = address.phone
-    object["address"] = add.to_json
+    object["address"] = add
   end
 end
